@@ -6,9 +6,9 @@ import glob
 from enum import Enum
 from collections import namedtuple
 
-from helpers import *
-from tensorboard_logging import *
-from helper_keyboard import getch
+from utils.helpers import *
+from utils.tensorboard_logging import *
+from utils.helper_keyboard import getch
 
 #game objects
 player = "P"
