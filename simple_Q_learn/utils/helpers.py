@@ -36,16 +36,16 @@ def print_one_hot(one_hot):
     # print(" ".join(map(lambda value: '%f' % value, array)),"  max_value ",max(array),"  max_value_index", array.argmax())
     print "%s \tmax_value: %f, \tmax_value_index: %d" % ("\t".join(map(lambda value: "% 2.2f" % (value), array)),max(array),array.argmax())
 
-def data_array_to_one_hot(data_array, vocab_array):
-  token_ids_one_hot = np.zeros((len(data_array), len_of_vocab(vocab_array)))
+def data_array_to_one_hot(data_array, num_classes):
+  token_ids_one_hot = np.zeros((len(data_array), num_classes))
   token_ids_one_hot[np.arange(len(data_array)), data_array] = 1
   return token_ids_one_hot
 
 
-def data_array_to_one_hot_from_batch(batch, vocab_array):
+def data_array_to_one_hot_from_batch(batch, num_classes):
   batch_of_token_ids_one_hot = []
   for data_array in batch:
-    batch_of_token_ids_one_hot.append(data_array_to_one_hot(data_array,vocab_array))
+    batch_of_token_ids_one_hot.append(data_array_to_one_hot(data_array,num_classes))
   return batch_of_token_ids_one_hot
 
 def one_hot_batch_to_array(one_hot_batch):

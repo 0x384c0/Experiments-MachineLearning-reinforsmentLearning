@@ -5,6 +5,7 @@ import time
 
 from game.Game import *
 from game.AIPlayer import *
+from game.AIPlayerNew import *
 from game.HumanPlayer import *
 
 quit_key = "q"
@@ -14,7 +15,8 @@ quit_key = "q"
 print "Controls - left: " + left_key + " right: " + right_key + " quit: " + quit_key
 game = Game()
 # player = HumanPlayer()
-player = AIPlayer(game)
+# player = AIPlayer(game)
+player = AIPlayerNew(game)
 
 game.reset()
 
