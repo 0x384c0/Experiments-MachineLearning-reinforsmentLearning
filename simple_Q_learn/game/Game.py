@@ -3,7 +3,7 @@ sys.path.append('..')
 from enum import Enum
 import copy
 
-from utils.helpers import *
+from helpers.utils import *
 
 
 #game objects
@@ -42,19 +42,20 @@ class Game():
 	last_win_position = None
 
 	score = 0
-	encoded_game_field_state = None
+	__encoded_game_field_state = None
 
 
-	steps_from_game_begins_for_max_inactivity_penalty = game_field_width * 2
+	steps_from_game_begins_for_max_inactivity_penalty = game_field_width * 5
 	steps_from_game_begins = 0
 
 	def get_vocab_rev(self):
 		return vocab_rev
 
+	def get_state(self):
+		return self.__encoded_game_field_state;
 
 	def state_shape(self):
 		return (game_field_width,num_classes)
-
 
 	def state_shape_2D(self):
 		return (1,game_field_width,num_classes)
@@ -72,34 +73,44 @@ class Game():
 		return game_field_width
 
 	def getFieldSize(self):
-		return len(self.encoded_game_field_state)
+		return len(self.__encoded_game_field_state)
 
 	def getPlayerPosition(self):
-		return self.encoded_game_field_state.index(player_id)
+		return self.__encoded_game_field_state.index(player_id)
 
+	def print_controls(self):
+		print "Controls - left: " + left_key + " right: " + right_key
 
 	def reset(self):
 		self.steps_from_game_begins = 0
-		self.encoded_game_field_state = sentence_to_token_ids(initial_game_field,vocab)
+		self.__encoded_game_field_state = sentence_to_token_ids(initial_game_field,vocab)
 
 
 		empty_indexes = []
-		for idx,field_id in enumerate(self.encoded_game_field_state):
+		for idx,field_id in enumerate(self.__encoded_game_field_state):
 
 			if field_id == player_id:
-				self.encoded_game_field_state[idx] = empty_id
+				self.__encoded_game_field_state[idx] = empty_id
+
+			if field_id == bonus_id:
+				self.__encoded_game_field_state[idx] = empty_id
 
 			if field_id == empty_id:
 				empty_indexes.append(idx)
 
+
+		random_bonus_position = random.choice(empty_indexes)
+		self.__encoded_game_field_state[random_bonus_position] = bonus_id
+		empty_indexes.remove(random_bonus_position)
+
 		random_player_position = random.choice(empty_indexes)
-		self.encoded_game_field_state[random_player_position] = player_id
+		self.__encoded_game_field_state[random_player_position] = player_id
 
 	def render(self):
 		OKGREEN = '\033[92m'
 		FAIL = '\033[91m'
 		ENDC = '\033[0m'
-		field_str = token_ids_to_sentence(self.encoded_game_field_state, vocab_rev)
+		field_str = token_ids_to_sentence(self.__encoded_game_field_state, vocab_rev)
 		if self.last_win_position != None:
 			field_str = field_str[:self.last_win_position + 1] + ENDC + field_str[self.last_win_position + 1:]
 			field_str = field_str[:self.last_win_position] + OKGREEN + field_str[self.last_win_position:]
@@ -115,14 +126,14 @@ class Game():
 
 	def get_train_data(self,action_id):
 		old_score = self.score
-		old_state = copy.copy( self.encoded_game_field_state)
+		old_state = copy.copy( self.__encoded_game_field_state)
 
 		reward = self.send_key(actions[action_id])
-		new_state = copy.copy( self.encoded_game_field_state)
+		new_state = copy.copy( self.__encoded_game_field_state)
 		game_over = reward != GameResult.none
 
 		self.score = old_score
-		self.encoded_game_field_state = old_state
+		self.__encoded_game_field_state = old_state
 
 		return old_state, action_id, reward, new_state, game_over
 
@@ -152,25 +163,25 @@ class Game():
 		self.steps_from_game_begins += 1
 
 		#out of bounds
-		if player_position < 0 or player_position > len(self.encoded_game_field_state) - 1:
+		if player_position < 0 or player_position > len(self.__encoded_game_field_state) - 1:
 			self.score -= 1
 			self.reset()
 			self.last_los_position = player_position
 			return GameResult.los
 		#win
-		if self.encoded_game_field_state[player_position] == bonus_id:
+		if self.__encoded_game_field_state[player_position] == bonus_id:
 			self.score += 1
 			self.reset()
 			self.last_win_position = player_position
 			return GameResult.win
 		#los
-		if self.encoded_game_field_state[player_position] == bullet_id:
+		if self.__encoded_game_field_state[player_position] == bullet_id:
 			self.score -= 1
 			self.reset()
 			self.last_los_position = player_position
 			return GameResult.los
 		#continue
 
-		self.encoded_game_field_state[old_player_position] = empty_id
-		self.encoded_game_field_state[player_position] = player_id
+		self.__encoded_game_field_state[old_player_position] = empty_id
+		self.__encoded_game_field_state[player_position] = player_id
 		return GameResult.none

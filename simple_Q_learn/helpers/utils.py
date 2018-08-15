@@ -148,20 +148,11 @@ def read_file_to_input_and_train_data(file_name,time_steps,batch_size):
 
   return input_data,train_data
 
+#env vars
 
+import os
+def is_train_mode():
+  return os.getenv('TRAIN_MODE', "False") == "True"
 
-
-# Lazy Property Decorator
-import functools
-def define_scope(function):
-  attribute = '_cache_' + function.__name__
-  
-  @property
-  @functools.wraps(function)
-  def decorator(self):
-    if not hasattr(self, attribute):
-      with tf.variable_scope(function.__name__):
-        setattr(self, attribute, function(self))
-    return getattr(self, attribute)
-
-  return decorator
+def is_human_player_mode():
+  return os.getenv('HUMAN_PLAYER_MODE', "False") == "True"
