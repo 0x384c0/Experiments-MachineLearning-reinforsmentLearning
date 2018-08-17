@@ -3,7 +3,8 @@ import numpy as np
 import time
 
 from helpers.utils import *
-from game.Game import Game
+from game_th.Game import Game
+# from game.Game import Game
 from ai_player.AIPlayer import AIPlayer
 from game.HumanPlayer import HumanPlayer
 

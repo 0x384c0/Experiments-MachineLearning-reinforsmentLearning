@@ -2,6 +2,10 @@ import tensorflow as tf
 import numpy as np
 import random
 
+# number helpers
+def clamp(n, smallest, largest): 
+  return max(smallest, min(n, largest))
+
 # Weight Initialization function
 def weight_variable(shape):
   initial = tf.truncated_normal(shape, stddev=0.1)
