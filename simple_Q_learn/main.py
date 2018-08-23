@@ -3,17 +3,23 @@ import numpy as np
 import time
 
 from helpers.utils import *
-from game_th.Game import Game
-# from game.Game import Game
 from ai_player.AIPlayer import AIPlayer
+
+# from game.Game import Game
+# from game.nnet.NNet import NNet
+# from game.HumanPlayer import HumanPlayer
+
+from game_th.Game import Game
+from game_th.nnet.NNet import NNet
 from game.HumanPlayer import HumanPlayer
 
 
 # TRAIN = True
 TRAIN = is_train_mode()
+HUMAN_PLAYER = is_human_player_mode()
 
 game = Game()
-player = HumanPlayer() if is_human_player_mode() else AIPlayer(game)
+player = HumanPlayer() if HUMAN_PLAYER else AIPlayer(game,NNet)
 
 game.print_controls()
 game.reset()

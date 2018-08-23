@@ -13,7 +13,7 @@ class ExperienceReplay(object):
 	During gameplay all the experiences < s, a, r, s’ > are stored in a replay memory. 
 	In training, batches of randomly drawn experiences are used to generate the input and target for training.
 	"""
-	def __init__(self, max_memory=MAX_MEMORY, discount=.9):
+	def __init__(self, shape, num_actions, max_memory=MAX_MEMORY, discount=.9):
 		"""
 		Setup
 		max_memory: the maximum number of experiences we want to store
@@ -26,6 +26,9 @@ class ExperienceReplay(object):
 		[experience, game_over]
 		...]
 		"""
+		self.shape = shape
+		self.num_actions = num_actions
+
 		self.max_memory = max_memory
 		self.memory = list()
 		self.discount = discount
@@ -47,12 +50,12 @@ class ExperienceReplay(object):
 		env_dim = self.memory[0][0][0].shape[1]
 
 		#We want to return an input and target vector with inputs from an observed state...
-		inputs = np.zeros(shape=(batch_size,17,5))
+		inputs = np.zeros(shape=(batch_size,) + self.shape)
 
 		#...and the target r + gamma * max Q(s’,a’)
 		#Note that our target is a matrix, with possible fields not only for the action taken but also
 		#for the other possible actions. The actions not take the same value as the prediction to not affect them
-		targets = np.zeros(shape=(batch_size,2))
+		targets = np.zeros(shape=(batch_size,self.num_actions))
 
 		#We draw states to learn from randomly
 		for i, idx in enumerate(np.random.randint(0, len_memory,

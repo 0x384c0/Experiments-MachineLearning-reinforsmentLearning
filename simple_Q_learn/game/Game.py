@@ -48,36 +48,11 @@ class Game():
 	steps_from_game_begins_for_max_inactivity_penalty = game_field_width * 5
 	steps_from_game_begins = 0
 
-	def get_vocab_rev(self):
-		return vocab_rev
 
-	def get_state(self):
-		return self.__encoded_game_field_state;
-
-	def state_shape(self):
-		return (game_field_width,num_classes)
-
-	def state_shape_2D(self):
-		return (1,game_field_width,num_classes)
-
-	def get_actions(self):
-		return actions
-
-	def get_num_actions(self):
-		return num_actions
-
-	def get_num_classes(self):
-		return num_classes
-
-	def get_game_field_width(self):
-		return game_field_width
-
-	def getFieldSize(self):
-		return len(self.__encoded_game_field_state)
-
-	def getPlayerPosition(self):
+	def __getPlayerPosition(self):
 		return self.__encoded_game_field_state.index(player_id)
 
+	# public
 	def print_controls(self):
 		print "Controls - left: " + left_key + " right: " + right_key
 
@@ -124,23 +99,10 @@ class Game():
 
 		print "|" + field_str + "| score: " + str(self.score)
 
-	def get_train_data(self,action_id):
-		old_score = self.score
-		old_state = copy.copy( self.__encoded_game_field_state)
-
-		reward = self.send_key(actions[action_id])
-		new_state = copy.copy( self.__encoded_game_field_state)
-		game_over = reward != GameResult.none
-
-		self.score = old_score
-		self.__encoded_game_field_state = old_state
-
-		return old_state, action_id, reward, new_state, game_over
-
 
 
 	def send_key(self,pressed_key):
-		player_position = self.getPlayerPosition()
+		player_position = self.__getPlayerPosition()
 
 		old_player_position = player_position
 
@@ -185,3 +147,40 @@ class Game():
 		self.__encoded_game_field_state[old_player_position] = empty_id
 		self.__encoded_game_field_state[player_position] = player_id
 		return GameResult.none
+
+
+	#nn utils
+	def state_to_onehot(self,state):
+		return data_array_to_one_hot(state,num_classes)
+
+	# aiplayer requirements
+	def get_actions(self):
+		return actions
+
+	def get_num_actions(self):
+		return num_actions
+
+	def state_shape(self):
+		return (game_field_width,num_classes)
+
+
+	def get_state(self):
+		return self.state_to_onehot(self.__encoded_game_field_state)
+
+
+
+	def get_train_data(self,action_id):
+		old_score = self.score
+		old_state = copy.copy( self.__encoded_game_field_state)
+
+		reward = self.send_key(actions[action_id])
+		new_state = copy.copy( self.__encoded_game_field_state)
+		game_over = reward != GameResult.none
+
+		self.score = old_score
+		self.__encoded_game_field_state = old_state
+
+		old_state = self.state_to_onehot(old_state)
+		new_state = self.state_to_onehot(new_state)
+
+		return old_state, action_id, reward, new_state, game_over

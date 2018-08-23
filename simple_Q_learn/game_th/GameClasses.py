@@ -11,7 +11,7 @@ def fract(x):
 class GameResult(Enum):
 	win = 1
 	los = -1
-	none = 0
+	none = 0.001
 
 class Point():
 	def __init__(self, x, y):
@@ -66,7 +66,7 @@ class CircleBulletEmitter():
 
 class CircleWithHoleBulletEmitter():
 	def __init__(self, origin, angleMin, angleMax, speed, delay):
-		num_rays = 50
+		num_rays = 80
 		self.__emitters = []
 		for n in range(num_rays):
 			angleDiff = angleMax - angleMin
