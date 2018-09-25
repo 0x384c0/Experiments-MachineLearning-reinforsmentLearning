@@ -76,10 +76,11 @@ class Game():
 		origin = Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
 		self._animation_time = 0
 		self._emitters = [
-		CircleWithHoleBulletEmitter(origin, PI * -0.5, PI * 1.2, 0.5, 12)
-		# VarAngleBulletEmitter(origin, PI * 0., PI * 1.2, 30, True, 1, 1),
-		# VarAngleBulletEmitter(origin, PI * 2., PI * 0.8, 30, False, 1, 1),
-		# CircleBulletEmitter(origin, 10, 1, 6),
+		CircleWithHoleBulletEmitter	(origin=origin, delay=12, speed=0.5, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80)),
+		# BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30, start_offset=True)),
+		# BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30, start_offset=False)),
+		# BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30)),
+		# CircleBulletEmitter			(origin=origin, delay=10, speed=1, num_rays=20),
 		]
 		self._bullets = []
 		self._player_position = copy.copy(START_PLAYER_POSITION)

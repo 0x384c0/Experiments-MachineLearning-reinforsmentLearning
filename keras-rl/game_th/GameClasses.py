@@ -45,53 +45,73 @@ class Bullet():
 		self._prev_time = time
 		self.__origin = Point(self.__origin.x + time_diff * self.velocity.x, self.__origin.y + time_diff * self.velocity.y)
 
-		
+# single emitters	
 class BulletEmitter():
-	def __init__(self, origin, angle, speed, delay):
-		self.origin, self.angle, self.speed, self.delay = origin, float(angle), float(speed), float(delay)
+	def __init__(self, origin, speed, delay, angle, angle_generator=None):
+		self.origin, self.speed, self.delay, self.angle, self.angle_generator = origin, float(speed), float(delay), float(angle), angle_generator
 
 	def emit(self,time, bullets):
 		if time % self.delay == 0:
-			bullets.append( Bullet(self.origin, Point(sin(self.angle) * self.speed, cos(self.angle) * self.speed), time))
+			angle = self.angle
+			if self.angle_generator is not None:
+				diff = self.angle_generator.get_angle(time)
+				if diff is not None:
+					angle += diff
+				else:
+					return
+			bullets.append( Bullet(self.origin, Point(sin(angle) * self.speed, cos(angle) * self.speed), time))
 
+
+
+
+# circle emitters
 class CircleBulletEmitter():
-	def __init__(self, origin, num_rays, speed, delay):
+	def __init__(self, origin, delay, speed, num_rays):
 		self.__emitters = []
 		for n in range(num_rays):
-			self.__emitters.append(BulletEmitter(origin, PI * 2. * (float(n)/float(num_rays)), speed, delay))
+			self.__emitters.append(BulletEmitter(origin, speed, delay, PI * 2. * (float(n)/float(num_rays))))
 
 	def emit(self,time, bullets):
 		for emitter in self.__emitters:
 			emitter.emit(time,bullets)
 
 class CircleWithHoleBulletEmitter():
-	def __init__(self, origin, angleMin, angleMax, speed, delay):
-		num_rays = 80
+	def __init__(self, origin, delay, speed, num_rays, angle_min, angle_max, angle_generator=None):
 		self.__emitters = []
 		for n in range(num_rays):
-			angleDiff = angleMax - angleMin
-			andgle = angleMin + angleDiff * (float(n)/float(num_rays))
-			self.__emitters.append(BulletEmitter(origin, andgle, speed, delay))
+			angleDiff = angle_max - angle_min
+			andgle = angle_min + angleDiff * (float(n)/float(num_rays))
+			self.__emitters.append(BulletEmitter(origin, speed, delay, andgle, angle_generator))
 
 	def emit(self,time, bullets):
 		for emitter in self.__emitters:
 			emitter.emit(time,bullets)
 
 
-class VarAngleBulletEmitter():
-	def __init__(self, origin, angleMin, angleMax, angleTime, startOffset, speed, delay):
-		self.origin, self.angleMin, self.angleMax, self.angleTime, self.startOffset ,self.speed, self.delay = origin, angleMin, angleMax, float(angleTime), startOffset, speed, delay
 
-	def emit(self,time, bullets):
+
+#var angle
+class AngleGeneratorLinear():
+	def __init__(self, diff, period, start_offset):
+		self.diff, self.period, self.start_offset = diff, float(period), start_offset
+
+	def get_angle(self,time):
 		time = float(time)
 
-		f2time = self.angleTime*2. * fract(time/(self.angleTime*2.))
-		if self.startOffset and f2time >= self.angleTime:
-			return
 
-		if not self.startOffset and f2time < self.angleTime:
-			return
+		f2time = self.period*2. * fract(time/(self.period*2.))
+		if self.start_offset and f2time >= self.period:
+			return None
 
-		if time % self.delay == 0:
-			angle = self.angleMin + (self.angleMax - self.angleMin) * fract(time/self.angleTime) 
-			bullets.append( Bullet(self.origin, Point(sin(angle) * self.speed, cos(angle) * self.speed), time))
+		if not self.start_offset and f2time < self.period:
+			return None
+
+		return self.diff * fract(time/self.period) 
+
+
+class AngleGeneratorSine():
+	def __init__(self, diff, period):
+		self.diff, self.period = diff, float(period)
+
+	def get_angle(self,time):
+		return self.diff * sin(fract(time/self.period) * PI * 2  )
