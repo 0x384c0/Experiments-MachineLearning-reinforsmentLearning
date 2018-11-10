@@ -1,3 +1,6 @@
+setup:
+	pip install -r requirements.txt
+
 play:
 	export RENDER="True"; \
 	python play.py

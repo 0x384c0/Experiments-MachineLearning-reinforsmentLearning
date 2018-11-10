@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-import curses
 import traceback
 import copy
 import random
@@ -11,6 +10,9 @@ from helpers.utils import *
 from GameClasses import *
 
 RENDER = is_render()
+
+if RENDER:
+	import curses
 
 FIELD_SIZE = Size(40,20) # w,h
 START_PLAYER_POSITION = Point(FIELD_SIZE.w/2,0) #x,y
@@ -59,7 +61,7 @@ class Game():
 
 	def _update_game_state(self):
 		self._game_state = np.zeros(FIELD_SIZE.shape()) # empty
-		self._game_state[self._player_position.x][self._player_position.y] = vocab[sym_player]
+		self._game_state[int(self._player_position.x)][int(self._player_position.y)] = vocab[sym_player]
 		self._animation_time += 1
 
 		# emit bullets
@@ -71,7 +73,7 @@ class Game():
 		for bullet in self._bullets:
 			bullet.move(self._animation_time)
 			if bullet.origin.x >= 0 and bullet.origin.x < FIELD_SIZE.w and bullet.origin.y >= 0 and bullet.origin.y < FIELD_SIZE.h:
-				self._game_state[bullet.origin.x][bullet.origin.y] = vocab[sym_bullet]
+				self._game_state[int(bullet.origin.x)][int(bullet.origin.y)] = vocab[sym_bullet]
 			else:
 				bullet_for_deleting.append(bullet)
 		self._bullets = [x for x in self._bullets if x not in bullet_for_deleting]

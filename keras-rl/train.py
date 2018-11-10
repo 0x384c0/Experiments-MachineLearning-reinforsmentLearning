@@ -1,3 +1,6 @@
+import sys
+sys.path.append("game_th")
+
 from timeit import default_timer as timer
 import datetime
 
