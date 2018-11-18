@@ -7,7 +7,15 @@ from collections import namedtuple
 
 from helpers.utils import *
 
-from GameClasses import *
+#TODO: remove try and fix
+try:
+	from .GameClasses import *
+except Exception as e:
+	pass
+try:
+	from GameClasses import *
+except Exception as e:
+	pass
 
 RENDER = is_render()
 

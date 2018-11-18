@@ -1,6 +1,14 @@
 import numpy as np
 
-from nnet.NNet import NNet
+#TODO: fix and remove try
+try:
+	from .nnet.NNet import NNet
+except Exception as e:
+	pass
+try:
+	from nnet.NNet import NNet
+except Exception as e:
+	pass
 
 
 WINDOW_LENGTH = 1
