@@ -13,7 +13,7 @@ from game_th.nnet.NNet import NNet
 game = Game()
 env = Env(game)
 # nnet = NNet( (env.STATE_HISTORY_SIZE,) + game.state_shape(), game.get_num_actions())
-nnet = NNet( (1,) + game.state_shape(), game.get_num_actions())
+nnet = NNet( (1,) + env.get_shape_with_history(), game.get_num_actions())
 
 agentWrapper = AgentWrapper(env,nnet,game.get_num_actions())
 
