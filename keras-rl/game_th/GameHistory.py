@@ -3,7 +3,7 @@ import numpy as np
 class GameHistory():
 
 	
-	def __init__(self,size,shape):
+	def __init__(self,shape):
 		self._size = 4 # history size
 		self._shape = shape
 		self.shape_with_history = (self._shape[0] * self._size,self._shape[1])

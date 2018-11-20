@@ -12,7 +12,7 @@ class Env():
 	def __init__(self,game):
 		self._game = game
 		self.action_space = spaces.Discrete(self._game.get_num_actions())
-		self._game_history = GameHistory(self._game.state_shape())
+		self._game_history = GameHistory(shape=self._game.state_shape())
 		# self.observation_space = spaces.Box(low=0, high=self._game.max_state_value(), dtype=np.uint8, shape=(self.STATE_HISTORY_SIZE,) + self._game.state_shape()) # TODO: remove if not used
 
 	def step(self, action):

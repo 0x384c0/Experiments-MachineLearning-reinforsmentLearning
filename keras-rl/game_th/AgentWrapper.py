@@ -9,7 +9,7 @@ from rl.callbacks import FileLogger, ModelIntervalCheckpoint
 
 WINDOW_LENGTH = 1
 
-NB_STEPS				= 10000#1000000
+NB_STEPS				= 150000#1000000
 MEMORY_LIMIT			= NB_STEPS
 NB_STEPS_WARMUP			= NB_STEPS * 0.1# NB_STEPS * 0.05
 TARGET_MODEL_UPDATE		= NB_STEPS * 0.01

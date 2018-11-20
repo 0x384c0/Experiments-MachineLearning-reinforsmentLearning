@@ -1,12 +1,13 @@
 import numpy as np
-from GameHistory import GameHistory
 
 #TODO: fix and remove try
 try:
+	from .GameHistory import GameHistory
 	from .nnet.NNet import NNet
 except Exception as e:
 	pass
 try:
+	from GameHistory import GameHistory
 	from nnet.NNet import NNet
 except Exception as e:
 	pass
