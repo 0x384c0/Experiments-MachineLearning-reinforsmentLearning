@@ -53,16 +53,17 @@ max_vocab_value = 3
 class Game():
 	def __init__(self):
 		self._myscreen = curses.initscr() if RENDER else None
+		speed_modifier = 0.5
 		origin = Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
 		self._emitters_sets = [[
-			CircleWithHoleBulletEmitter	(origin=origin, delay=12, speed=0.5, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80)),
+			CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / speed_modifier, speed=0.5 * speed_modifier, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80.0 / speed_modifier)),
 		],[
-			BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30, start_offset=True)),
-			BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30, start_offset=False)),
+			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30.0 / speed_modifier, start_offset=True)),
+			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30.0 / speed_modifier, start_offset=False)),
 		],[
-			BulletEmitter				(origin=origin, delay=1,  speed=1, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30))
+			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30.0 / speed_modifier))
 		],[
-			CircleBulletEmitter			(origin=origin, delay=10, speed=1, num_rays=20),
+			CircleBulletEmitter			(origin=origin, delay=10.0 / speed_modifier, speed=1.0 * speed_modifier, num_rays=20),
 		]]
 		self._emitters = None
 
