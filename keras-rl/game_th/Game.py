@@ -24,7 +24,9 @@ if RENDER:
 
 FIELD_SIZE = Size(40,20) # w,h
 START_PLAYER_POSITION = Point(FIELD_SIZE.w/2,0) #x,y
-WIN_TIME = int(FIELD_SIZE.h * 5)
+SPEED_MODIFIER = 0.5
+EMITTER_RESET_TIME = int(50 / SPEED_MODIFIER)
+WIN_TIME = 500 # minimum win time
 
 #game objects
 sym_player = "P"
@@ -53,19 +55,19 @@ max_vocab_value = 3
 class Game():
 	def __init__(self):
 		self._myscreen = curses.initscr() if RENDER else None
-		speed_modifier = 0.5
 		origin = Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
 		self._emitters_sets = [[
-			CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / speed_modifier, speed=0.5 * speed_modifier, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80.0 / speed_modifier)),
+			CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / SPEED_MODIFIER, speed=0.5 * SPEED_MODIFIER, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80.0 / SPEED_MODIFIER)),
 		],[
-			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30.0 / speed_modifier, start_offset=True)),
-			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30.0 / speed_modifier, start_offset=False)),
+			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30.0 / SPEED_MODIFIER, start_offset=True)),
+			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30.0 / SPEED_MODIFIER, start_offset=False)),
 		],[
-			BulletEmitter				(origin=origin, delay=1.0 / speed_modifier,  speed=1.0 * speed_modifier, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30.0 / speed_modifier))
+			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30.0 / SPEED_MODIFIER))
 		],[
-			CircleBulletEmitter			(origin=origin, delay=10.0 / speed_modifier, speed=1.0 * speed_modifier, num_rays=20),
+			CircleBulletEmitter			(origin=origin, delay=10.0 / SPEED_MODIFIER, speed=1.0 * SPEED_MODIFIER, num_rays=20),
 		]]
 		self._emitters = None
+		self.win_time_modifier = 0
 
 	def _update_game_state(self):
 		self._game_state = np.zeros(FIELD_SIZE.shape()) # empty
@@ -90,7 +92,6 @@ class Game():
 		self.stop()
 
 	def _get_emitters(self):
-		EMITTER_RESET_TIME = 60
 		if self._animation_time % EMITTER_RESET_TIME == 0 or self._emitters == None:
 			self._emitters = random.choice(self._emitters_sets)
 		return self._emitters
@@ -147,7 +148,8 @@ class Game():
 				self.reset()
 				return GameResult.los
 
-		if self._animation_time % WIN_TIME == 0:
+		if self._animation_time > WIN_TIME:
+			self.reset()
 			return GameResult.win
 
 		return GameResult.none
