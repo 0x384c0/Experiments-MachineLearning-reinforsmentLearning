@@ -1,5 +1,6 @@
 import os  
 
+import numpy as np
 from keras.optimizers import Adam
 from rl.agents.dqn import DQNAgent
 from rl.policy import LinearAnnealedPolicy, BoltzmannQPolicy, EpsGreedyQPolicy
@@ -26,10 +27,9 @@ checkpoint_weights_filename		= 'tmp/dqn_' + env_name + '_weights_{step}.h5f'
 log_filename					= 'tmp/dqn_{}_log.json'.format(env_name)
 
 
-# class PrintProcessor(Processor):
-# 	def process_state_batch(self, batch):
-# 		# print(batch)
-# 		return batch
+class AgentProcessor(Processor):
+	def process_reward(self, reward):
+		return np.clip(reward, -1., 1.)
 
 
 class AgentWrapper():
@@ -44,7 +44,8 @@ class AgentWrapper():
 		               nb_steps_warmup=NB_STEPS_WARMUP, target_model_update=TARGET_MODEL_UPDATE)
 		dqn.compile(Adam(lr=.00025), metrics=['mae'])
 
-		# dqn.processor = PrintProcessor()
+		self.processor = AgentProcessor()
+		dqn.processor = self.processor
 
 		#for training
 
