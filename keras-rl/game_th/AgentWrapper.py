@@ -6,7 +6,7 @@ from rl.agents.dqn import DQNAgent
 from rl.policy import LinearAnnealedPolicy, BoltzmannQPolicy, EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 from rl.core import Processor
-from rl.callbacks import FileLogger, ModelIntervalCheckpoint
+from rl.callbacks import FileLogger, ModelIntervalCheckpoint, TrainIntervalLogger
 
 WINDOW_LENGTH = 1
 
@@ -29,6 +29,7 @@ log_filename					= 'tmp/dqn_{}_log.json'.format(env_name)
 
 class AgentProcessor(Processor):
 	def process_reward(self, reward):
+		# print("reward " + str(reward))
 		return np.clip(reward, -1., 1.)
 
 
@@ -41,7 +42,7 @@ class AgentWrapper():
 		policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=1., value_min=.1, value_test=.05,
 		                              nb_steps=EPS_GREEDY_NB_STEPS)
 		dqn = DQNAgent(model=model, nb_actions=nb_actions, policy=policy, memory=memory,
-		               nb_steps_warmup=NB_STEPS_WARMUP, target_model_update=TARGET_MODEL_UPDATE)
+		               nb_steps_warmup=NB_STEPS_WARMUP, target_model_update=TARGET_MODEL_UPDATE)# gamma=.99, train_interval=4, delta_clip=1.
 		dqn.compile(Adam(lr=.00025), metrics=['mae'])
 
 		self.processor = AgentProcessor()
@@ -63,9 +64,11 @@ class AgentWrapper():
 			print(weights_filename + " not found")
 
 	def train(self):
-		callbacks = [ModelIntervalCheckpoint(checkpoint_weights_filename, interval=INTERVAL_CALLBACK)]
-		callbacks += [FileLogger(log_filename, interval=FILE_LOGGER_INTERVAL)]
-		self.dqn.fit(self.env, callbacks=callbacks, nb_steps=NB_STEPS, log_interval=FIT_LOG_INTERVAL , verbose=2)
+		callbacks = [
+			ModelIntervalCheckpoint(checkpoint_weights_filename, interval=INTERVAL_CALLBACK),
+			FileLogger(log_filename, interval=FILE_LOGGER_INTERVAL)
+		]
+		self.dqn.fit(self.env, callbacks=callbacks, nb_steps=NB_STEPS, log_interval=FIT_LOG_INTERVAL)
 
 	def test(self):
 		self.dqn.test(env, nb_episodes=10, visualize=True)

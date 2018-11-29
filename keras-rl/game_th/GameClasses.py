@@ -9,9 +9,9 @@ def fract(x):
 
 #classes
 class GameResult(Enum):
-	win = 1
-	los = -1
-	none = -1e-3
+	win = 1.0
+	los = -1.0
+	none = 0.005
 
 class Point():
 	def __init__(self, x, y):

@@ -26,7 +26,7 @@ FIELD_SIZE = Size(40,20) # w,h
 START_PLAYER_POSITION = Point(FIELD_SIZE.w/2,0) #x,y
 SPEED_MODIFIER = 0.5
 EMITTER_RESET_TIME = int(50 / SPEED_MODIFIER)
-WIN_TIME = 500 # minimum win time
+WIN_TIME = 300 # minimum win time
 
 #game objects
 sym_player = "P"
@@ -62,7 +62,7 @@ class Game():
 			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI * 0., angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=30.0 / SPEED_MODIFIER, start_offset=True)),
 			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI * 2.,  angle_generator=AngleGeneratorLinear(diff=PI * -1.2, period=30.0 / SPEED_MODIFIER, start_offset=False)),
 		],[
-			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=30.0 / SPEED_MODIFIER))
+			BulletEmitter				(origin=origin, delay=1.0 / SPEED_MODIFIER,  speed=1.0 * SPEED_MODIFIER, angle=PI, angle_generator=AngleGeneratorSine(diff=PI*0.3, period=30.0 / SPEED_MODIFIER))
 		],[
 			CircleBulletEmitter			(origin=origin, delay=10.0 / SPEED_MODIFIER, speed=1.0 * SPEED_MODIFIER, num_rays=20),
 		]]
