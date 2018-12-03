@@ -25,6 +25,7 @@ env_name = "game_th"
 weights_filename				= 'tmp/dqn_{}_weights.h5f'.format(env_name)
 checkpoint_weights_filename		= 'tmp/dqn_' + env_name + '_weights_{step}.h5f'
 log_filename					= 'tmp/dqn_{}_log.json'.format(env_name)
+model_filename					= 'tmp/model.h5'
 
 
 class AgentProcessor(Processor):
@@ -55,6 +56,9 @@ class AgentWrapper():
 
 	def save_weights(self):
 		self.dqn.save_weights(weights_filename, overwrite=True)
+
+	def save_model(self):
+		self.dqn.model.save(model_filename)
 
 	def load_weights(self):
 		if os.path.exists(weights_filename):

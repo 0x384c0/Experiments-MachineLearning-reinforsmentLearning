@@ -1,5 +1,6 @@
-tensorflow
-keras
+tensorflow==1.12.0
+keras==2.2.2
+tensorflowjs==0.6.7
 gym
+atari_py
 keras-rl
-atari_py>=0.1.4'

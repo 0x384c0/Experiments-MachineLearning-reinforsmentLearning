@@ -16,3 +16,6 @@ train:
 
 clean:
 	rm -rf tmp
+
+to_tf_js:
+	python to_tf_js.py

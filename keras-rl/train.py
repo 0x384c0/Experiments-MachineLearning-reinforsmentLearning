@@ -22,6 +22,7 @@ start = timer()
 agentWrapper.load_weights()
 agentWrapper.train()
 agentWrapper.save_weights()
+agentWrapper.save_model()
 
 end = timer()
 print("Train time: " + str(datetime.timedelta(seconds=end - start)))
