@@ -1,4 +1,5 @@
 import numpy as np
+from helpers.helper_keyboard import getch
 
 #TODO: fix and remove try
 try:
@@ -28,6 +29,11 @@ class PlayerAI():
 		self.nnet = nnet
 
 	def get_input(self,game_state):
+		# pressed_key = getch()
+		# if pressed_key == "q":
+		# 	self.game.stop() # stty sane
+		# 	exit()
+			
 		self._game_history.put(game_state)
 		game_state_with_history = self._game_history.get()
 		observation = np.reshape(game_state_with_history,(1,) + self.game_state_shape)

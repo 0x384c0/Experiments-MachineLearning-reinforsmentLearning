@@ -66,10 +66,10 @@ class BulletEmitter():
 
 # circle emitters
 class CircleBulletEmitter():
-	def __init__(self, origin, delay, speed, num_rays):
+	def __init__(self, origin, delay, speed, num_rays, angle_generator=None):
 		self.__emitters = []
 		for n in range(num_rays):
-			self.__emitters.append(BulletEmitter(origin, speed, delay, PI * 2. * (float(n)/float(num_rays))))
+			self.__emitters.append(BulletEmitter(origin, speed, delay, PI * 2. * (float(n)/float(num_rays)),angle_generator))
 
 	def emit(self,time, bullets):
 		for emitter in self.__emitters:
@@ -92,7 +92,7 @@ class CircleWithHoleBulletEmitter():
 
 #var angle
 class AngleGeneratorLinear():
-	def __init__(self, diff, period, start_offset):
+	def __init__(self, diff, period, start_offset=None):
 		self.diff, self.period, self.start_offset = diff, float(period), start_offset
 
 	def get_angle(self,time):
@@ -100,11 +100,13 @@ class AngleGeneratorLinear():
 
 
 		f2time = self.period*2. * fract(time/(self.period*2.))
-		if self.start_offset and f2time >= self.period:
-			return None
 
-		if not self.start_offset and f2time < self.period:
-			return None
+		if self.start_offset is not None:
+			if self.start_offset and f2time >= self.period:
+				return None
+
+			if not self.start_offset and f2time < self.period:
+				return None
 
 		return self.diff * fract(time/self.period) 
 

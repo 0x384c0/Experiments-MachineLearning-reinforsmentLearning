@@ -56,9 +56,12 @@ class Game():
 	def __init__(self):
 		self._myscreen = curses.initscr() if RENDER else None
 		origin = Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
-		self._emitters_sets = [[ # start after 23
-			CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / SPEED_MODIFIER, speed=0.5 * SPEED_MODIFIER, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.30, period=80.0 / SPEED_MODIFIER)),
+		self._emitters_sets = [[ 
+			CircleBulletEmitter			(origin=origin, delay=3.0 / SPEED_MODIFIER, speed=1.0 * SPEED_MODIFIER, num_rays=10, angle_generator=AngleGeneratorLinear(diff=PI * 1.2, period=100.0 / SPEED_MODIFIER)),
 		]]
+		# self._emitters_sets = [[ # start after 23
+		# 	CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / SPEED_MODIFIER, speed=0.5 * SPEED_MODIFIER, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.30, period=80.0 / SPEED_MODIFIER)),
+		# ]]
 		# self._emitters_sets = [[
 		# 	CircleWithHoleBulletEmitter	(origin=origin, delay=12.0 / SPEED_MODIFIER, speed=0.5 * SPEED_MODIFIER, num_rays=80, angle_min=PI * -0.80, angle_max=PI * 0.80, angle_generator=AngleGeneratorSine(diff=PI*0.25, period=80.0 / SPEED_MODIFIER)),
 		# ],[
