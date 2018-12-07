@@ -47,6 +47,13 @@ class Bullet{
 		this._origin = new Point(this._origin.x + time_diff * this.velocity.x, this._origin.y + time_diff * this.velocity.y)
 	}
 
+	originFloat(w,h,gameFildSize){
+		return new Point(
+			(this._origin.x / gameFildSize.w) * w,
+			h - (this._origin.y / gameFildSize.h) * h
+			)
+		// return  new Point(this._origin.x,this._origin.y)
+	}
 }
 
 // single emitters	

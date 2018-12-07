@@ -159,6 +159,17 @@ class Game{
 		return this._game_state
 
 	}
+
+	get_player_position(w,h,gameFildSize){
+		return new Point(
+			(this._player_position.x / gameFildSize.w) * w,
+			h - (this._player_position.y / gameFildSize.h) * h
+			)
+	}
+
+	get_bullets(){
+		return this._bullets
+	}
 }
 
 
