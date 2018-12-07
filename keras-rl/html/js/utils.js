@@ -27,7 +27,10 @@ function clamp(a,b,c){
 }
 
 function int(float){
-	return Math.round(float)
+	if (float < 0)
+		return Math.ceil(float)
+	else
+		return Math.floor(float)
 }
 
 function float(int){

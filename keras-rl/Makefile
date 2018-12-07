@@ -3,7 +3,7 @@ setup:
 
 play:
 	export RENDER="True"; \
-	python play.py
+	python play.py || stty sane
 
 play_human:
 	export HUMAN_PLAYER_MODE="True"; \

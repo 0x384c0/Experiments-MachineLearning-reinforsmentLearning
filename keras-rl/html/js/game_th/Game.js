@@ -61,7 +61,8 @@ class Game{
 			else
 				bullet_for_deleting.push(bullet)
 		}
-		this._bullets.filter(function(value, index, arr){
+		
+		this._bullets = this._bullets.filter(function(value, index, arr){
 			return !bullet_for_deleting.includes(value)
 		});
 
@@ -87,9 +88,9 @@ class Game{
 	render(){
 		print( "animation_time: " + str(this._animation_time) + " WIN_TIME: " + str(WIN_TIME) + "  ")
 		let result = ""
-		for (let x of range(FIELD_SIZE.w)){
-			for (let y of range(FIELD_SIZE.h)){
-				let sym = vocab_rev[int(this._game_state.get(x,y))]
+		for (let y of range(FIELD_SIZE.h)){
+			for (let x of range(FIELD_SIZE.w)){
+				let sym = vocab_rev[int(this._game_state.get(x, (FIELD_SIZE.h - 1) - y))]
 				// y_rev = FIELD_SIZE.h - 1 - y
 				result += sym
 			}

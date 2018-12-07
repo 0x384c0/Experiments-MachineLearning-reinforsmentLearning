@@ -34,16 +34,16 @@ class Size(Point):
 
 class Bullet():
 	def __init__(self, origin, velocity, time):
-		self.__origin, self.velocity, self._prev_time = origin, velocity, time
+		self._origin, self.velocity, self._prev_time = origin, velocity, time
 
 	@property
 	def origin(self):
-		return Point(int(self.__origin.x),int(self.__origin.y))
+		return Point(int(self._origin.x),int(self._origin.y))
 
 	def move(self,time):
 		time_diff = float(time - self._prev_time)
 		self._prev_time = time
-		self.__origin = Point(self.__origin.x + time_diff * self.velocity.x, self.__origin.y + time_diff * self.velocity.y)
+		self._origin = Point(self._origin.x + time_diff * self.velocity.x, self._origin.y + time_diff * self.velocity.y)
 
 # single emitters	
 class BulletEmitter():
