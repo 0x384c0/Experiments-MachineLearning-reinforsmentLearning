@@ -22,8 +22,8 @@ function domContentLoaded() {
 	.then(() => {
 		initPixiJs()
 		hideLoading()
-		document.addEventListener('keydown', refresh)
-		// timerId = setInterval(refresh, 100)
+		// document.addEventListener('keydown', refresh)
+		timerId = setInterval(refresh, 80)
 	})
 }
 
