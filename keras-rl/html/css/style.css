@@ -5,8 +5,8 @@
 
 
 .pixi_game_element{
-    width: 800;
-    height: 600;
+	width: 100%;
+    height: auto;
 }
 
 

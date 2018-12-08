@@ -29,7 +29,7 @@ function domContentLoaded() {
 
 //UI Others
 function initPixiJs(){
-	pixiJsRenderer = new PixiJSRenderer(game,document.body)
+	pixiJsRenderer = new PixiJSRenderer(game,pixiGameElement)
 }
 function initNNet(){
 	nnet = new NNet()
