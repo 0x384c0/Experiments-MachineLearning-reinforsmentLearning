@@ -124,8 +124,8 @@ class AngleGeneratorLinear{
 		this.start_offset = start_offset
 	}
 
-	get_angle(time){
-		let time = float(time)
+	get_angle(i_time){
+		let time = float(i_time)
 
 
 		let f2time = this.period*2. * fract(time/(this.period*2.))
