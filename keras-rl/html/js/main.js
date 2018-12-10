@@ -23,7 +23,7 @@ function domContentLoaded() {
 		initPixiJs()
 		hideLoading()
 		// document.addEventListener('keydown', refresh)
-		timerId = setInterval(refresh, 80)
+		timerId = setInterval(refresh, 40)
 	})
 }
 
