@@ -83,11 +83,11 @@ class BulletEmitter{
 
 // circle emitters
 class CircleBulletEmitter{
-	constructor(origin, delay, speed, num_rays){
+	constructor(origin, delay, speed, num_rays, angle_generator=null){
 
 		this.__emitters = []
 		for (let n of range(num_rays)){
-			this.__emitters.push(new BulletEmitter(origin, speed, delay, PI * 2. * (float(n)/float(num_rays))))
+			this.__emitters.push(new BulletEmitter(origin, speed, delay, PI * 2. * (float(n)/float(num_rays)),angle_generator))
 		}
 	}
 
@@ -129,12 +129,16 @@ class AngleGeneratorLinear{
 
 
 		let f2time = this.period*2. * fract(time/(this.period*2.))
-		if (this.start_offset && f2time >= this.period){
-			return null
-		}
 
-		if (!this.start_offset && f2time < this.period){
-			return null
+		if (this.start_offset != null){
+
+			if (this.start_offset && f2time >= this.period){
+				return null
+			}
+
+			if (!this.start_offset && f2time < this.period){
+				return null
+			}
 		}
 
 		return this.diff * fract(time/this.period) 

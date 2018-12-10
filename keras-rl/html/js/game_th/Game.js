@@ -37,9 +37,12 @@ class Game{
 	constructor(){
 		
 		origin = new Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
-		this._emitters_sets = [[ // start after 26
-			new CircleWithHoleBulletEmitter	(origin, 12.0 / SPEED_MODIFIER, 0.5 * SPEED_MODIFIER, 80, PI * -0.80, PI * 0.80, new AngleGeneratorSine(PI*0.30, 80.0 / SPEED_MODIFIER)),
+		this._emitters_sets = [[ 
+			new CircleBulletEmitter(origin, 3.0 / SPEED_MODIFIER, 1.0 * SPEED_MODIFIER, 10, new AngleGeneratorLinear(PI * 1.2, 100.0 / SPEED_MODIFIER)),
 		]]
+		// this._emitters_sets = [[ // start after 26
+		// 	new CircleWithHoleBulletEmitter	(origin, 12.0 / SPEED_MODIFIER, 0.5 * SPEED_MODIFIER, 80, PI * -0.80, PI * 0.80, new AngleGeneratorSine(PI*0.30, 80.0 / SPEED_MODIFIER)),
+		// ]]
 		this._emitters = null
 		this.win_time_modifier = 0
 	}
