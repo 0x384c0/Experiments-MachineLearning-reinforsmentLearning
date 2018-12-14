@@ -118,10 +118,11 @@ class CircleWithHoleBulletEmitter{
 // var angle
 class AngleGeneratorLinear{
 
-	constructor( diff, period, start_offset){
+	constructor( diff, period, start_offset, modifier){
 		this.diff = diff
 		this.period = float(period)
 		this.start_offset = start_offset
+		this.modifier = modifier
 	}
 
 	get_angle(i_time){
@@ -141,7 +142,7 @@ class AngleGeneratorLinear{
 			}
 		}
 
-		return this.diff * fract(time/this.period) 
+		return this.diff * fract(time/this.period) + this.modifier
 	}
 }
 

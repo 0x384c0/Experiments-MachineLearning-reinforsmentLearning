@@ -3,7 +3,7 @@ FIELD_SIZE = new Size(40,20), // w,h
 START_PLAYER_POSITION = new Point(FIELD_SIZE.w/2,0), //x,y
 SPEED_MODIFIER = 0.5,
 EMITTER_RESET_TIME = int(50 / SPEED_MODIFIER),
-WIN_TIME = 300, // minimum win time
+WIN_TIME = 3000, // minimum win time
 
 //game objects
 sym_player = "P",
@@ -38,13 +38,14 @@ class Game{
 		
 		origin = new Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
 		this._emitters_sets = [[ 
-			new CircleBulletEmitter(origin, 3.0 / SPEED_MODIFIER, 1.0 * SPEED_MODIFIER, 10, new AngleGeneratorLinear(PI * 1.2, 100.0 / SPEED_MODIFIER)),
+			new CircleBulletEmitter(origin, 3.0 / SPEED_MODIFIER, 1.0 * SPEED_MODIFIER, 10, new AngleGeneratorLinear(PI * 1.2, 100.0 / SPEED_MODIFIER, null, 0)),
 		]]
 		// this._emitters_sets = [[ // start after 26
 		// 	new CircleWithHoleBulletEmitter	(origin, 12.0 / SPEED_MODIFIER, 0.5 * SPEED_MODIFIER, 80, PI * -0.80, PI * 0.80, new AngleGeneratorSine(PI*0.30, 80.0 / SPEED_MODIFIER)),
 		// ]]
 		this._emitters = null
 		this.win_time_modifier = 0
+		this.is_first_round = true
 	}
 	_update_game_state(){
 		this._game_state = np.zeros(FIELD_SIZE.shape()) // empty
@@ -81,6 +82,17 @@ class Game{
 
 	}
 	reset(){
+
+		if (!this.is_first_round){
+			origin = new Point(FIELD_SIZE.w/2, FIELD_SIZE.h * 0.8)
+			this._emitters_sets = [[ 
+				new CircleBulletEmitter(origin, 3.0 / SPEED_MODIFIER, 1.0 * SPEED_MODIFIER, 10, new AngleGeneratorLinear(PI * 1.2, 100.0 / SPEED_MODIFIER, null, Math.random())),
+			]]
+		} else {
+			this.is_first_round = false
+		}
+
+
 		this._emitters = null
 		this._animation_time = 0
 		this._bullets = []
