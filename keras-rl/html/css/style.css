@@ -3,6 +3,37 @@
 	/* text-align: center; */
 }
 
+.grid-container {
+	padding: 5px;
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-gap: 10px;
+}
+
+.grid-item {
+	border: 1px solid black;
+	padding: 5px;
+	text-align: center;
+	overflow: hidden; 
+}
+progress{
+	float: right;
+	width: 80%;
+	-webkit-appearance: none;
+	appearance: none;
+}
+progress::-webkit-progress-bar { background: #fff; }
+progress::-webkit-progress-value { background: #3498db; }
+
+.selected_action{
+	border: 3px solid red;
+}
+.not_seleted_action{
+	border: 3px solid transparent;
+}
+.progress-label{
+	float: left;
+}
 
 .pixi_game_element{
 	width: 100%;

@@ -1,9 +1,12 @@
-let
 //UI
+let
 loadingIndicator,
 gameElement,
 pixiGameElement,
+progresses
+
 //others
+let
 nnet,
 game,
 player,
@@ -17,6 +20,13 @@ function domContentLoaded() {
 	loadingIndicator = document.getElementById("loadingIndicator")
 	gameElement = document.getElementById("game_element")
 	pixiGameElement = document.getElementById("pixi_game_element")
+	progresses = [
+		document.getElementById("pr_left"),
+		document.getElementById("pr_right"),
+		document.getElementById("pr_up"),
+		document.getElementById("pr_down"),
+		document.getElementById("pr_stay"),
+	]
 	showLoading()
 	initNNet()
 	.then(() => {
@@ -47,8 +57,23 @@ function initNNet(){
 	})
 }
 function refresh(){
-	pressed_key_id = player
+	let 
+	result = player
 	.get_input(game.get_state())
+
+	let 
+	pressed_key_id = result.action,
+	action_props = result.action_props
+
+	for (let [i, progress] of progresses.entries()){
+		progress.value = 100 * action_props[i]
+		if (i == pressed_key_id){
+			progress.className = "selected_action"
+		} else {
+			progress.className = "not_seleted_action"
+		}
+	}
+
 	game.send_key(pressed_key_id)
 	// gameElement.innerHTML = game.render()
 	game.render()
